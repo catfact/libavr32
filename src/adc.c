@@ -1,4 +1,4 @@
-/ASF
+// ASF
 #include "compiler.h"
 #include "delay.h"
 #include "interrupt.h"

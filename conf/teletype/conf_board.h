@@ -149,9 +149,14 @@
 #define SPI_NPCS2_PIN         AVR32_SPI_NPCS_2_1_PIN
 #define SPI_NPCS2_FUNCTION    AVR32_SPI_NPCS_2_1_FUNCTION
 
-#define DAC_SPI 0
-#define ADC_SPI 1
-#define OLED_SPI 2
+// peripheral addresses
+#define ADC_SPI SPI
+#define DAC_SPI SPI
+
+// chip select indices
+#define DAC_SPI_NPCS 0
+#define ADC_SPI_NPCS 1
+#define OLED_SPI_NPCS 2
 
 
 //TWI

@@ -34,11 +34,11 @@ static u32 nb; // count of destination bytes
 
 static void write_command(U8 c);
 static void write_command(U8 c) {
-  spi_selectChip(SPI, OLED_SPI);
+  spi_selectChip(SPI, OLED_SPI_NPCS);
   // pull register select low to write a command
   gpio_clr_gpio_pin(OLED_DC_PIN);
   spi_write(SPI, c);
-  spi_unselectChip(SPI, OLED_SPI);
+  spi_unselectChip(SPI, OLED_SPI_NPCS);
 }
 
 // set the current drawing area of the physical screen (hopefully)
@@ -166,14 +166,14 @@ void init_oled(void) {
   // set drawing region
   screen_set_rect(x, y, w, h);
   // select chip for data
-  spi_selectChip(SPI, OLED_SPI);
+  spi_selectChip(SPI, OLED_SPI_NPCS);
   // register select high for data
   gpio_set_gpio_pin(OLED_DC_PIN);
   // send data
   for(i=0; i<(nb); i++) {
     spi_write(SPI, screenBuf[i]);
   }
-  spi_unselectChip(SPI, OLED_SPI);
+  spi_unselectChip(SPI, OLED_SPI_NPCS);
 }
 
 // draw data at given rectangle, with starting byte offset within the region data.
@@ -219,25 +219,25 @@ void screen_draw_region_offset(u8 x, u8 y, u8 w, u8 h, u32 len, u8* data, u32 of
   // set drawing region
   screen_set_rect(x, y, w, h);
   // select chip for data
-  spi_selectChip(SPI, OLED_SPI);
+  spi_selectChip(SPI, OLED_SPI_NPCS);
   // register select high for data
   gpio_set_gpio_pin(OLED_DC_PIN);
   // send data
   for(i=0; i<(nb); i++) {
     spi_write(SPI, screenBuf[i]);
   }
-  spi_unselectChip(SPI, OLED_SPI);
+  spi_unselectChip(SPI, OLED_SPI_NPCS);
 }
 
 
  // clear OLED RAM and local screenbuffer
 void screen_clear(void) {
-  spi_selectChip(SPI, OLED_SPI);
+  spi_selectChip(SPI, OLED_SPI_NPCS);
   // pull register select high to write data
   gpio_set_gpio_pin(OLED_DC_PIN);
   for(i=0; i<GRAM_BYTES; i++) { 
     screenBuf[i] = 0;
     spi_write(SPI, 0);
   }
-  spi_unselectChip(SPI, OLED_SPI);
+  spi_unselectChip(SPI, OLED_SPI_NPCS);
 }

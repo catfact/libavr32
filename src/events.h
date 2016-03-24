@@ -3,10 +3,12 @@
 
 #include "types.h"
 
-
-// global array of pointers to handlers
-extern void (*app_event_handlers[])(s32 data);
-
+// FIXME:
+// aleph has more event types for UI hardware.
+// there is probably a cleaner way of doing this.
+#ifdef MOD_ALEPH 
+#include "event_types.h"
+#else
 
 // enumerate event types
 typedef enum {
@@ -46,6 +48,8 @@ typedef enum {
   kNumEventTypes,
 } etype;
 
+#endif
+
 
 
 typedef struct {
@@ -53,6 +57,8 @@ typedef struct {
   s32 data;
 } event_t;
 
+// global array of pointers to handlers
+extern void (*app_event_handlers[])(s32 data);
 
 // init event queue
 void init_events( void );

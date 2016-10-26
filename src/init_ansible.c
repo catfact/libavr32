@@ -19,8 +19,7 @@
 
 //#define UI_IRQ_PRIORITY AVR32_INTC_INT2
 
-void clock_null(u8 phase);
-void clock_null(u8 phase) {;;}
+// void clock_null(u8 phase) {;;}
 
 
 //------------------------
@@ -31,8 +30,8 @@ volatile u8 tcOverflow = 0;
 static const u64 tcMax = (U64)0x7fffffff;
 static const u64 tcMaxInv = (u64)0x10000000;
 
-volatile clock_pulse_t clock_pulse = &clock_null;
-volatile u8 clock_external;
+// volatile clock_pulse_t clock_pulse = &clock_null;
+// volatile u8 clock_external;
 
 //----------------------
 //---- static functions 
@@ -42,9 +41,13 @@ volatile u8 clock_external;
 __attribute__((__interrupt__))
 static void irq_tc(void);
 
-// irq for PA08-PA15
-__attribute__((__interrupt__))
-static void irq_port0_line1(void);
+// // irq for PA08-PA15
+// __attribute__((__interrupt__))
+// static void irq_port0_line1(void);
+
+// // irq for PB00-PB07
+// __attribute__((__interrupt__))
+// static void irq_port1_line0(void);
 
 // irq for PB08-PB15
 __attribute__((__interrupt__))
@@ -78,51 +81,74 @@ static void irq_tc(void) {
 
 
 // interrupt handler for PA08-PA15
-__attribute__((__interrupt__))
-static void irq_port0_line1(void) {
-    if(gpio_get_pin_interrupt_flag(NMI)) {
-      gpio_clear_pin_interrupt_flag(NMI);
-      // print_dbg("\r\n ### NMI ### ");
-      static event_t e;
-      e.type = kEventFront;
-      e.data = gpio_get_pin_value(NMI);
-      event_post(&e);
-    }
-}
+// __attribute__((__interrupt__))
+// static void irq_port0_line1(void) {
+//     if(gpio_get_pin_interrupt_flag(NMI)) {
+//       // print_dbg("\r\n ### NMI ### ");
+//       static event_t e;
+//       e.type = kEventFront;
+//       e.data = gpio_get_pin_value(NMI);
+//       event_post(&e);
+//       gpio_clear_pin_interrupt_flag(NMI);
+//     }
+// }
+
+// interrupt handler for PB00-PB07
+// __attribute__((__interrupt__))
+// static void irq_port1_line0(void) {
+//     // tr (key) in
+//     if(gpio_get_pin_interrupt_flag(B06)) {
+//       static event_t e;
+//       e.type = kEventKey;
+//       e.data = gpio_get_pin_value(B06);
+//       event_post(&e);
+//       gpio_clear_pin_interrupt_flag(B06);
+//     }
+
+//     // tr (key) in
+//     if(gpio_get_pin_interrupt_flag(B07)) {
+//       static event_t e;
+//       e.type = kEventKey;
+//       e.data = gpio_get_pin_value(B07) + 2;
+//       event_post(&e);
+//       gpio_clear_pin_interrupt_flag(B07);
+//     }
+// }
+
 
 // interrupt handler for PB08-PB15
 __attribute__((__interrupt__))
 static void irq_port1_line1(void) {
     // print_dbg("\r\ninterrupt on PB08-PB15.");
 
-    // static event_t e;   
-    // e.type = kSwitchEvents[swIdx];
-    // e.data = gpio_get_pin_value(kSwitchPins[swIdx]); 
-    // event_post(&e);
-
     // clock norm
-    if(gpio_get_pin_interrupt_flag(B09)) {
+    // if(gpio_get_pin_interrupt_flag(B10)) {
 
-      static event_t e;
-      e.type = kEventClockNormal;
-      e.data = !gpio_get_pin_value(B09);
-      event_post(&e);
-
-      gpio_clear_pin_interrupt_flag(B09);
-    }
+    //   static event_t e;
+    //   e.type = kEventTrNormal;
+    //   e.data = !gpio_get_pin_value(B10);
+    //   event_post(&e);
+    //   gpio_clear_pin_interrupt_flag(B10);
+    // }
 
     // clock in
     if(gpio_get_pin_interrupt_flag(B08)) {
-      // CLOCK BOUNCY WITHOUT THESE PRINTS
-      // print_dbg("\rclk: ");
-      // print_dbg_ulong(gpio_get_pin_value(B08));
-      // (*clock_pulse)(gpio_get_pin_value(B08));
       static event_t e;
-      e.type = kEventClockExt;
+      e.type = kEventTr;
       e.data = gpio_get_pin_value(B08);
       event_post(&e);
       gpio_clear_pin_interrupt_flag(B08);
     }
+
+    // tr in
+    if(gpio_get_pin_interrupt_flag(B09)) {
+      static event_t e;
+      e.type = kEventTr;
+      e.data = gpio_get_pin_value(B09) + 2;
+      event_post(&e);
+      gpio_clear_pin_interrupt_flag(B09);
+    }
+
 }
 
 
@@ -138,13 +164,19 @@ static void irq_port1_line1(void) {
 // register interrupts
 void register_interrupts(void) {
 	// enable interrupts on GPIO inputs
-	gpio_enable_pin_interrupt( NMI, GPIO_PIN_CHANGE);
+	// gpio_enable_pin_interrupt( NMI, GPIO_PIN_CHANGE);
+  // gpio_enable_pin_interrupt( B06, GPIO_PIN_CHANGE);
+  // gpio_enable_pin_interrupt( B07, GPIO_PIN_CHANGE);
 	gpio_enable_pin_interrupt( B08, GPIO_PIN_CHANGE);
-	gpio_enable_pin_interrupt( B09,	GPIO_PIN_CHANGE);
+  gpio_enable_pin_interrupt( B09, GPIO_PIN_CHANGE);
+	// gpio_enable_pin_interrupt( B10,	GPIO_PIN_CHANGE);
 
 
 	// PA08 - PA15
-	INTC_register_interrupt( &irq_port0_line1, AVR32_GPIO_IRQ_0 + (AVR32_PIN_PA08 / 8), UI_IRQ_PRIORITY);
+	// INTC_register_interrupt( &irq_port0_line1, AVR32_GPIO_IRQ_0 + (AVR32_PIN_PA08 / 8), UI_IRQ_PRIORITY);
+
+  // PB00 - PB07
+  // INTC_register_interrupt( &irq_port1_line0, AVR32_GPIO_IRQ_0 + (AVR32_PIN_PB00 / 8), UI_IRQ_PRIORITY);
 
 	// PB08 - PB15
 	INTC_register_interrupt( &irq_port1_line1, AVR32_GPIO_IRQ_0 + (AVR32_PIN_PB08 / 8), UI_IRQ_PRIORITY);
@@ -169,6 +201,13 @@ extern void init_gpio(void) {
     gpio_enable_gpio_pin(B09);
     gpio_enable_gpio_pin(B10);
     gpio_enable_gpio_pin(NMI);
+
+    gpio_enable_pin_pull_up(B06);
+    gpio_enable_pin_pull_up(B07);
+
+    gpio_enable_pin_glitch_filter(B06);
+    gpio_enable_pin_glitch_filter(B07);
+    gpio_enable_pin_glitch_filter(NMI);
 }
 
 
@@ -189,8 +228,8 @@ extern void init_spi (void) {
 
 
   spi_options_t spiOptions = {
-    .reg = DAC_SPI_NPCS,
-    .baudrate = 2000000,
+    .reg = DAC_SPI,
+    .baudrate = 4000000,
     .bits = 8,
     .trans_delay = 0,
     .spck_delay = 0,
@@ -212,7 +251,7 @@ extern void init_spi (void) {
 
 
   // add ADC chip register
-  spiOptions.reg          = ADC_SPI_NPCS;
+  spiOptions.reg          = ADC_SPI;
   spiOptions.baudrate     = 20000000;
   spiOptions.bits         = 16;
   spiOptions.spi_mode     = 2;

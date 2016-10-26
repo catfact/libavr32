@@ -1,3 +1,30 @@
+#define II_ANSIBLE_ADDR       0xA0
+#define II_GET                128
+#define II_ANSIBLE_TR         1
+#define II_ANSIBLE_TR_TOG     2
+#define II_ANSIBLE_TR_PULSE   3
+#define II_ANSIBLE_TR_TIME    4
+#define II_ANSIBLE_TR_POL     5
+#define II_ANSIBLE_CV         6
+#define II_ANSIBLE_CV_SLEW    7
+#define II_ANSIBLE_CV_OFF     8
+#define II_ANSIBLE_CV_SET     9
+#define II_ANSIBLE_INPUT      10
+
+#define JF_ADDR 	0xF0
+#define JF_TR 		1
+#define JF_RMODE 	2
+#define JF_RUN 		3
+#define JF_SHIFT 	4
+#define JF_VTR 		5
+#define JF_MODE 	6
+#define JF_TICK 	7
+#define JF_VOX 		8
+#define JF_NOTE 	9
+#define JF_GOD 		10
+#define JF_TUNE		11
+#define JF_QT		12
+
 #define WW 				0x10
 #define WW_PRESET 		0x11
 #define WW_POS			0x12

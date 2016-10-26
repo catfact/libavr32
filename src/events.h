@@ -14,11 +14,14 @@
 typedef enum {
   kEventNone,
   kEventFront,
+  kEventFrontShort,
+  kEventFrontLong,
   kEventTimer,
   kEventPollADC,
   kEventKeyTimer,
   kEventSaveFlash,
   kEventClockNormal,
+  kEventClockExt,
   /// connect/disconnect FTDI-based devices
   kEventFtdiConnect,
   kEventFtdiDisconnect,
@@ -39,10 +42,17 @@ typedef enum {
   // Trigger EVENT (8 digital inputs)
   kEventTrigger,
   kEventII,
+  kEventIItx,
+  kEventIIrx,
 
   kEventMidiConnect,
   kEventMidiDisconnect,
   kEventMidiPacket,
+
+  kEventTr,
+  kEventTrNormal,
+  kEventKey,
+
 
   /// dummy/count
   kNumEventTypes,

@@ -173,6 +173,7 @@
 
 
 //TWI
+#define TWI 					(&AVR32_TWI)
 #define TWI_DATA_PIN            AVR32_TWI_SDA_0_0_PIN
 #define TWI_DATA_FUNCTION   AVR32_TWI_SDA_0_0_FUNCTION
 #define TWI_CLOCK_PIN           AVR32_TWI_SCL_0_0_PIN
@@ -196,5 +197,8 @@
 #define USB_VBOF_ACTIVE_LEVEL       LOW
 //! USB overcurrent detection pin.
 #define USB_OVERCURRENT_DETECT_PIN  AVR32_PIN_PX33
+
+// tell libavr32 that we are an Aleph  board
+#define MOD_ALEPH
 
 #endif // header guard

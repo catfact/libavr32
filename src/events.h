@@ -3,13 +3,6 @@
 
 #include "types.h"
 
-// FIXME:
-// aleph has more event types for UI hardware.
-// there is probably a cleaner way of doing this.
-#ifdef MOD_ALEPH 
-#include "aleph_event_types.h"
-#else
-
 // enumerate event types
 typedef enum {
   kEventNone,
@@ -37,7 +30,7 @@ typedef enum {
   kEventHidDisconnect,
   kEventHidPacket,
   kEventHidTimer,
-
+  
   kEventScreenRefresh,
   // Trigger EVENT (8 digital inputs)
   kEventTrigger,
@@ -48,19 +41,38 @@ typedef enum {
   kEventMidiConnect,
   kEventMidiDisconnect,
   kEventMidiPacket,
+  kEventMidiRefresh,
 
   kEventTr,
   kEventTrNormal,
   kEventKey,
-
-
+  
+  // aleph-specific
+  kEventAdc0 , 	// receive values from polled ADC channels
+  kEventAdc1 ,
+  kEventAdc2 ,
+  kEventAdc3 ,
+  /// encoders
+  kEventEncoder0,
+  kEventEncoder1,
+  kEventEncoder2 ,
+  kEventEncoder3 ,
+  //// switches
+  kEventSwitch0, // fn1
+  kEventSwitch1, // fn2
+  kEventSwitch2, // fn3
+  kEventSwitch3, // fn4
+  kEventSwitch4, // mode
+  kEventSwitch5, // power
+  kEventSwitch6, // foot1
+  kEventSwitch7, // foot2
+  // serial rx
+  kEventSerial,
+  // arbitrary loopback from within application
+  kEventAppCustom,
   /// dummy/count
   kNumEventTypes,
 } etype;
-
-#endif
-
-
 
 typedef struct {
   etype type;

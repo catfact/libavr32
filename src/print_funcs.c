@@ -4,7 +4,7 @@
  *
  * \brief Strings and integers print module for debug purposes.
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2009 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -41,9 +41,6 @@
  * \asf_license_stop
  *
  ******************************************************************************/
-/*
- * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
- */
 
 
 #include "compiler.h"
@@ -51,6 +48,11 @@
 #include "usart.h"
 #include "print_funcs.h"
 
+// #define USART_BEGIN_DBG_TX   usart_putchar(DBG_USART,1)
+// #define USART_END_DBG_TX   usart_putchar(DBG_USART,0)
+
+#define USART_BEGIN_DBG_TX ;
+#define USART_END_DBG_TX ;
 
 //! ASCII representation of hexadecimal digits.
 static const char HEX_DIGITS[16] = "0123456789ABCDEF";
@@ -88,32 +90,46 @@ void init_dbg_rs232_ex(unsigned long baudrate, long pba_hz)
   usart_init_rs232(DBG_USART, &dbg_usart_options, pba_hz);
 }
 
+#if RELEASEBUILD==1
+
+/// print_dbg funcs are #defined as noops in header
+
+#else
+
 
 void print_dbg(const char *str)
 {
   // Redirection to the debug USART.
+  USART_BEGIN_DBG_TX;
   print(DBG_USART, str);
+  USART_END_DBG_TX;
 }
 
 
 void print_dbg_char(int c)
 {
   // Redirection to the debug USART.
+  USART_BEGIN_DBG_TX;
   print_char(DBG_USART, c);
+  USART_END_DBG_TX;
 }
 
 
 void print_dbg_ulong(unsigned long n)
 {
   // Redirection to the debug USART.
+  USART_BEGIN_DBG_TX;
   print_ulong(DBG_USART, n);
+  USART_END_DBG_TX;
 }
 
 
 void print_dbg_char_hex(unsigned char n)
 {
   // Redirection to the debug USART.
-  print_char_hex(DBG_USART, n);
+  USART_BEGIN_DBG_TX;
+  print_char_hex(DBG_USART, n);  
+  USART_END_DBG_TX;
 }
 
 
@@ -127,8 +143,48 @@ void print_dbg_short_hex(unsigned short n)
 void print_dbg_hex(unsigned long n)
 {
   // Redirection to the debug USART.
+  USART_BEGIN_DBG_TX;
   print_hex(DBG_USART, n);
+  USART_END_DBG_TX;
 }
+
+void print_byte_array (u8* data, u32 size, u32 linebreak) {
+  u32 i, j;
+  u32 b, boff;
+  u32 addr = (u32)data;
+  print_dbg("\r\n");
+  print_dbg_hex(addr);
+  if(linebreak > 0) {
+    print_dbg(": \r\n" ); 
+  } else {
+    print_dbg(" : " ); 
+  }
+  j = 0;
+  while(j<size) {
+    b = 0;
+    boff = 24;
+    for(i=0; i<4; i++) {
+      //      if(i == 2) { print_dbg(" "); }
+      b |= ( *(u8*)addr ) << boff;
+      addr++;
+      boff -= 8;
+    }
+    print_dbg_hex(b);
+    print_dbg(" ");
+    j += 4;
+    if( (linebreak > 0) && ((j % linebreak) == 0) ) { print_dbg("\r\n"); }
+  }
+}
+
+void print_unicode_string(char* str, u32 len) {
+  u32 i; // byte index
+  print_dbg("\r\n");
+  for(i=0; i<len; i++) {
+    print_dbg_char(str[i]);
+  }
+}
+
+#endif // debug build
 
 
 void print(volatile avr32_usart_t *usart, const char *str)
@@ -215,3 +271,4 @@ void print_hex(volatile avr32_usart_t *usart, unsigned long n)
   // Transmit the resulting string with the given USART.
   print(usart, tmp);
 }
+

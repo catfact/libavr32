@@ -7,19 +7,6 @@
 #ifndef _CONF_ALEPH_H_
 #define _CONF_ALEPH_H_
 
-/* //============================================== */
-/* //==== SDRAM */
-/* //define SDRAM_PART_HDR  "mt48lc16m16a2tg7e/mt48lc16m16a2tg7e.h" */
-
-/* //! Part header file of used SDRAM(s). */
-/* /// this is the actual part number, i attempted to customize, doesn't seem to matter */
-/* #define SDRAM_PART_HDR  "mt48lc16m16a2tg75.h" */
-/* ///// this is the defualt header for that part family from the EVK */
-/* //#define SDRAM_PART_HDR  "mt48lc16m16a2tg7e.h" */
-
-/* //! Data bus width to use the SDRAM(s) with (16 or 32 bits; always 16 bits on UC3). */
-/* #define SDRAM_DBW 16 */
-
 //==============================================
 //==== clocks
 
@@ -95,11 +82,11 @@
 #define OLED_SPI_NPCS              0
 
 // adc, multiplexed
-#define ADC_SPI                    OLED_SPI
+#define ADC_SPI                    (&AVR32_SPI1)
 #define ADC_SPI_NPCS               1
 
 // sdcard, multiplexed
-#define SD_MMC_SPI                 OLED_SPI
+#define SD_MMC_SPI                 (&AVR32_SPI1)
 #define SD_MMC_SPI_NPCS            2
 
 // blackfin SPI
@@ -188,13 +175,16 @@
 // id:   unused.... but lets put it on pa21 and keep that reserved
 
 #define USB_ID                      AVR32_USBB_USB_ID_0_2 // PA21
+
 //! Multiplexed pin used for USB_VBOF: AVR32_USBB_USB_VBOF_x_x.
 //! To be selected according to the AVR32_USBB_USB_VBOF_x_x_PIN and
 //! AVR32_USBB_USB_VBOF_x_x_FUNCTION definitions from <avr32/uc3axxxx.h>.
 /// FIXME: what is this multiplexed with?
-#define USB_VBOF                    AVR32_USBB_USB_VBOF_0_2 // 
+#define USB_VBOF                    AVR32_USBB_USB_VBOF_0_2
+
 //! Active level of the USB_VBOF output pin.
 #define USB_VBOF_ACTIVE_LEVEL       LOW
+
 //! USB overcurrent detection pin.
 #define USB_OVERCURRENT_DETECT_PIN  AVR32_PIN_PX33
 

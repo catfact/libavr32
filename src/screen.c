@@ -1,9 +1,12 @@
 // ASF
+#include "board.h"
 #include "delay.h"
 #include "gpio.h"
 #include "intc.h"
 #include "print_funcs.h"
 #include "spi.h"
+
+// libavr32
 #include "font.h"
 #include "screen.h"
 

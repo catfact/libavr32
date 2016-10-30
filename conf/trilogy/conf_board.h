@@ -38,8 +38,10 @@
  * \asf_license_stop
  */
 
-#ifndef CONF_BOARD_H
-#define CONF_BOARD_H
+#ifndef _TRILOGY_CONF_BOARD_H_
+#define _TRILOGY_CONF_BOARD_H_
+
+/// #warning including conf_board.h (trilogy)
 
 #include "compiler.h"
 

@@ -38,8 +38,10 @@
  * \asf_license_stop
  */
 
-#ifndef CONF_BOARD_H
-#define CONF_BOARD_H
+#ifndef _TELETYPE_CONF_BOARD_H_
+#define _TElETYPE_CONF_BOARD_H_
+
+// #warning including conf_board.h (teletype)
 
 #include "compiler.h"
 
@@ -152,12 +154,12 @@
 // peripheral addresses
 #define ADC_SPI SPI
 #define DAC_SPI SPI
+#define OLED_SPI SPI
 
 // chip select indices
 #define DAC_SPI_NPCS 0
 #define ADC_SPI_NPCS 1
 #define OLED_SPI_NPCS 2
-
 
 //TWI
 #define TWI 					(&AVR32_TWI)

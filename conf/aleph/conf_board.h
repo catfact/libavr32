@@ -4,8 +4,10 @@
    device-specific hardware defines for aleph-avr32
  */
 
-#ifndef _CONF_ALEPH_H_
-#define _CONF_ALEPH_H_
+#ifndef _ALEPH_CONF_BOARD_H_
+#define _ALEPH_CONF_BOARD_H_
+
+// #warning including conf_board.h (aleph) 
 
 //==============================================
 //==== clocks

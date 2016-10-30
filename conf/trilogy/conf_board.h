@@ -41,7 +41,7 @@
 #ifndef _TRILOGY_CONF_BOARD_H_
 #define _TRILOGY_CONF_BOARD_H_
 
-/// #warning including conf_board.h (trilogy)
+// #warning including conf_board.h (trilogy)
 
 #include "compiler.h"
 
@@ -150,6 +150,7 @@
 
 // compatibility with aleph
 #define ADC_SPI SPI
+#define DAC_SPI SPI
 
   //TWI
 #define TWI 					(&AVR32_TWI)
